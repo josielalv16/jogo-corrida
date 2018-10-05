@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.base{
+    margin: 0 auto;
+    width: 1200px;
+}
+.basePista{
+    /* background-image: url("../img/lampada_off.png"); */
+    width: 69%;
+    float: left;
+}
+.baseOpcoes{
+    width: 30%;
+    float: left;
+}
+
+#pista {
+    margin: 0 auto;
+}
+#pista td {
+    width: 100px;
+    height: 100px;
+}
+
+.obstaculo {
+    background-color: black;
+}
+
+.carrinho{
+    background-color: green;
+}
+
+.pontuacao{
+    width: 150px;
+    text-align: center;
+    font-size: 25px;
+    margin: 15px 0px;
+    padding: 10px 10px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.20);
+}

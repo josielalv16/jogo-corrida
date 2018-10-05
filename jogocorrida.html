@@ -1,13 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
     <head>
         <title>Jogo Corrida</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="css/jogocorrida.css" />
+        <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
         <script type="text/javascript" src="js/jogocorrida.js"></script>
     </head>
-    <body>
 
+    <body>
+        <div class="base">
+            <div class="basePista" id="basePista"></div>
+            <div class="baseOpcoes">
+                <div class="pontuacao">
+                    <div>Record</div>
+                    <div id="record">0</div>
+                </div>
+                <div class="pontuacao">
+                    <div>Pontuação</div>
+                    <div id="pontos">0</div>
+                </div>
+                <button id="novoJogo">Novo Jogo</button>
+            </div>
+        </div>
     </body>
+
 </html>
