@@ -8,7 +8,7 @@
     width: 1200px;
 }
 .basePista{
-    /* background-image: url("../img/lampada_off.png"); */
+    
     width: 69%;
     float: left;
 }
@@ -19,25 +19,62 @@
 
 #pista {
     margin: 0 auto;
+    background-image: url("../img/rua.jpg");
+    background-size: 518px;
 }
 #pista td {
-    width: 100px;
+    width: 45px;
     height: 100px;
 }
 
-.obstaculo {
-    background-color: black;
+.obstaculo1 {
+    background-image: url("../img/carro-branco.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+.obstaculo2 {
+    background-image: url("../img/carro-preto.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 
 .carrinho{
-    background-color: green;
+    background-image: url("../img/carro-vermelho.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
 }
 
 .pontuacao{
-    width: 150px;
+    width: 200px;
     text-align: center;
     font-size: 25px;
     margin: 15px 0px;
     padding: 10px 10px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.20);
+}
+
+.divBotao {
+    width: 200px;
+    text-align: center;
+    margin: 15px 0px;
+    padding: 10px 10px;
+}
+.botao{
+    text-transform: uppercase;
+    height: 36px;
+    background-color: #673AB7;
+    color: white;
+    border: 0;
+    margin: 15px 5px 15px 5px;
+    font-size: 14px;
+    padding: 0px 16px;
+    border-radius: 2px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.20);
+}
+.botao:hover{
+    background-color: #5E35B1;
+}
+.botao:active {
+    background-color: #512DA8;
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.14), 0 3px 14px rgba(0, 0, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.20);
 }

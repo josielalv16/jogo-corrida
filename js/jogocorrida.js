@@ -1,17 +1,17 @@
-var velocidade = 500;
+var velocidade = 1000;
 var linhaObstaculo = 0;
 var colunaObstaculo = 0;
 var linhaRemove = -1;
-var carrinhoL = 6;
-var carrinhoC = 2;
+var carrinhoL = 5;
+var carrinhoC = 5;
 var interval;
 var pontos = 0;
 var record = 0;
+var carObstaculo = 1;
 
 $(document).ready(function () {
     criarPista();
 
-    desenharCarrinho(carrinhoL, carrinhoC);
     $("body").bind("keydown", function (e) {
         var keyCode = e.which;
         if (keyCode > 36 && keyCode < 41) {
@@ -28,21 +28,25 @@ $(document).ready(function () {
 });
 
 function novoJogo(){
+    clearInterval(interval);
     velocidade = 1000;
     linhaObstaculo = 0;
     colunaObstaculo = 0;
     linhaRemove = -1;
-    carrinhoL = 6;
-    carrinhoC = 2;
+    carrinhoL = 5;
+    carrinhoC = 5;
     pontos = 0;
+    $("#pontos").text(pontos);
+    $("#status").text("Jogando");
     criarPista();
     desenharCarrinho(carrinhoL, carrinhoC);
     loop();
-    
-    
 }
 
 function loop() {
+    if(velocidade < 50){
+        velocidade = 50;
+    }
     interval = setTimeout(desenhaObstaculo, velocidade);
 }
 
@@ -50,9 +54,9 @@ function criarPista() {
     var base = $("#basePista");
     var html = "<table id='pista'>";
 
-    for (var linha = 0; linha < 7; linha++) {
+    for (var linha = 0; linha < 6; linha++) {
         html += "<tr>";
-        for (var coluna = 0; coluna < 5; coluna++) {
+        for (var coluna = 0; coluna < 11; coluna++) {
             html += "<td id='" + linha + "-" + coluna + "' class=''></td>";
         }
         html += "</tr>";
@@ -66,37 +70,10 @@ function desenharCarrinho(linha, coluna) {
     $("#" + linha + "-" + coluna).addClass("carrinho");
 }
 
-function andaCarrinho(key) {
-    $("#" + carrinhoL + "-" + carrinhoC).removeClass("carrinho");
-    if (key == 37 && carrinhoC > 0) {
-        carrinhoC--;
-    } else if (key == 38 && carrinhoL > 5) {
-        carrinhoL--;
-    } else if (key == 39 && carrinhoC < 4) {
-        carrinhoC++;
-    } else if (key == 40 && carrinhoL < 6) {
-        carrinhoL++;
-    }
-    desenharCarrinho(carrinhoL, carrinhoC);
-    verificaBatida();
-}
-
-
-function atualizaObstaculo(obstaculo) {
-    obstaculo.addClass("obstaculo");
-    $("#" + (linhaObstaculo - 1) + "-" + colunaObstaculo).removeClass("obstaculo");
-
-    linhaObstaculo++;
-    if (linhaObstaculo >= 8) {
-        linhaObstaculo = 0;
-        pontos++;
-        $("#pontos").text(pontos);
-    }
-}
-
 function desenhaObstaculo() {
     if (linhaObstaculo == 0) {
-        colunaObstaculo = Math.floor((Math.random() * 5));
+        carObstaculo = carObstaculo == 1 ? 2 : 1;
+        colunaObstaculo = Math.floor((Math.random() * 11));
     }
 
     atualizaObstaculo($("#" + linhaObstaculo + "-" + colunaObstaculo));
@@ -104,18 +81,50 @@ function desenhaObstaculo() {
     verificaBatida();
 }
 
+function atualizaObstaculo(obstaculo) {
+    if(carObstaculo == 1){
+        obstaculo.addClass("obstaculo1");
+        $("#" + (linhaObstaculo - 1) + "-" + colunaObstaculo).removeClass("obstaculo1");
+    }else{
+        obstaculo.addClass("obstaculo2");
+        $("#" + (linhaObstaculo - 1) + "-" + colunaObstaculo).removeClass("obstaculo2");
+    }
+
+    linhaObstaculo++;
+    if (linhaObstaculo >= 7) {
+        linhaObstaculo = 0;
+        pontos++;
+        $("#pontos").text(pontos);
+    }
+}
+
 function verificaBatida() {
     var tds = document.getElementsByTagName("td");
     for (var i = 0; i < tds.length; i++) {
         if (tds[i].className.indexOf("obstaculo") != -1 && tds[i].className.indexOf("carrinho") != -1) {
-            alert("bateu");
+            $("#status").text("Game Over");
             if(record < pontos){
                 record = pontos;
                 $("#record").text(record);
             }
             clearInterval(interval);
-            console.log(tds[i]);
-            // tds[i].removeClass("obstaculo");
         }
     }
+}
+
+function andaCarrinho(key) {
+    if($("#status").text() != "Game Over"){
+        $("#" + carrinhoL + "-" + carrinhoC).removeClass("carrinho");
+        if (key == 37 && carrinhoC > 0) {
+            carrinhoC--;
+        } else if (key == 38 && carrinhoL > 4) {
+            carrinhoL--;
+        } else if (key == 39 && carrinhoC < 10) {
+            carrinhoC++;
+        } else if (key == 40 && carrinhoL < 5) {
+            carrinhoL++;
+        }
+        desenharCarrinho(carrinhoL, carrinhoC);
+    }
+    verificaBatida();
 }
