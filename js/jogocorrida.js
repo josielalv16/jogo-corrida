@@ -1,4 +1,5 @@
 var velocidade = 1000;
+var velocidadePista = 3;
 var linhaObstaculo = 0;
 var colunaObstaculo = 0;
 var linhaRemove = -1;
@@ -8,6 +9,8 @@ var interval;
 var pontos = 0;
 var record = 0;
 var carObstaculo = 1;
+var rolaPista = 0;
+var intervalPista;
 
 $(document).ready(function () {
     criarPista();
@@ -25,11 +28,15 @@ $(document).ready(function () {
 
     novoJogo();
     setInterval(function () { velocidade -= 50; }, 2000);
+    setInterval(function () { velocidadePista++; }, 2000);
 });
 
 function novoJogo(){
     clearInterval(interval);
+    clearInterval(intervalPista);
+    intervalPista = setInterval(rolarPista, 50);
     velocidade = 1000;
+    velocidadePista = 3;
     linhaObstaculo = 0;
     colunaObstaculo = 0;
     linhaRemove = -1;
@@ -43,11 +50,21 @@ function novoJogo(){
     loop();
 }
 
+function rolarPista() {
+    var tabela = $("table")[0];
+    rolaPista+=velocidadePista;
+    if (rolaPista > 500){
+        rolaPista = 0;
+    }
+    tabela.style.backgroundPosition = "0px "+rolaPista+"px";
+}
+
 function loop() {
     if(velocidade < 50){
         velocidade = 50;
     }
     interval = setTimeout(desenhaObstaculo, velocidade);
+    
 }
 
 function criarPista() {
@@ -99,7 +116,7 @@ function atualizaObstaculo(obstaculo) {
 }
 
 function verificaBatida() {
-    var tds = document.getElementsByTagName("td");
+    var tds = $("td");
     for (var i = 0; i < tds.length; i++) {
         if (tds[i].className.indexOf("obstaculo") != -1 && tds[i].className.indexOf("carrinho") != -1) {
             $("#status").text("Game Over");
@@ -108,6 +125,7 @@ function verificaBatida() {
                 $("#record").text(record);
             }
             clearInterval(interval);
+            clearInterval(intervalPista);
         }
     }
 }
