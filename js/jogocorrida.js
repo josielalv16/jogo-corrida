@@ -2,6 +2,8 @@ var velocidade = 1000;
 var velocidadePista = 3;
 var linhaObstaculo = 0;
 var colunaObstaculo = 0;
+var linhaObstaculo2 = 0;
+var colunaObstaculo2 = -1;
 var linhaRemove = -1;
 var carrinhoL = 5;
 var carrinhoC = 5;
@@ -11,6 +13,7 @@ var record = 0;
 var carObstaculo = 1;
 var rolaPista = 0;
 var intervalPista;
+var listObs = [];
 
 $(document).ready(function () {
     criarPista();
@@ -22,7 +25,7 @@ $(document).ready(function () {
         }
     });
 
-    $("#novoJogo").click(function(){
+    $("#novoJogo").click(function () {
         novoJogo();
     });
 
@@ -31,7 +34,7 @@ $(document).ready(function () {
     setInterval(function () { velocidadePista++; }, 2000);
 });
 
-function novoJogo(){
+function novoJogo() {
     clearInterval(interval);
     clearInterval(intervalPista);
     intervalPista = setInterval(rolarPista, 50);
@@ -39,6 +42,8 @@ function novoJogo(){
     velocidadePista = 3;
     linhaObstaculo = 0;
     colunaObstaculo = 0;
+    linhaObstaculo2 = 0;
+    colunaObstaculo2 = -1;
     linhaRemove = -1;
     carrinhoL = 5;
     carrinhoC = 5;
@@ -52,19 +57,18 @@ function novoJogo(){
 
 function rolarPista() {
     var tabela = $("table")[0];
-    rolaPista+=velocidadePista;
-    if (rolaPista > 500){
+    rolaPista += velocidadePista;
+    if (rolaPista > 500) {
         rolaPista = 0;
     }
-    tabela.style.backgroundPosition = "0px "+rolaPista+"px";
+    tabela.style.backgroundPosition = "0px " + rolaPista + "px";
 }
 
 function loop() {
-    if(velocidade < 50){
+    if (velocidade < 50) {
         velocidade = 50;
     }
     interval = setTimeout(desenhaObstaculo, velocidade);
-    
 }
 
 function criarPista() {
@@ -89,29 +93,44 @@ function desenharCarrinho(linha, coluna) {
 
 function desenhaObstaculo() {
     if (linhaObstaculo == 0) {
-        carObstaculo = carObstaculo == 1 ? 2 : 1;
+        carObstaculo = carObstaculo == 2 ? 1 : 2;
         colunaObstaculo = Math.floor((Math.random() * 11));
     }
+    if (linhaObstaculo == 3) {
+        carObstaculo = carObstaculo == 1 ? 2 : 1;
+        colunaObstaculo2 = Math.floor((Math.random() * 11));
+    }
 
-    atualizaObstaculo($("#" + linhaObstaculo + "-" + colunaObstaculo));
+    listObs[0] = $("#" + linhaObstaculo + "-" + colunaObstaculo);
+    if (colunaObstaculo2 != -1) {
+        listObs[1] = $("#" + linhaObstaculo2 + "-" + colunaObstaculo2);
+    }
+    atualizaObstaculo(listObs);
+
     loop();
     verificaBatida();
 }
 
 function atualizaObstaculo(obstaculo) {
-    if(carObstaculo == 1){
-        obstaculo.addClass("obstaculo1");
-        $("#" + (linhaObstaculo - 1) + "-" + colunaObstaculo).removeClass("obstaculo1");
-    }else{
-        obstaculo.addClass("obstaculo2");
-        $("#" + (linhaObstaculo - 1) + "-" + colunaObstaculo).removeClass("obstaculo2");
-    }
+    $(obstaculo[0].addClass("obstaculo1"));
+    $("#" + (linhaObstaculo - 1) + "-" + colunaObstaculo).removeClass("obstaculo1");
 
     linhaObstaculo++;
     if (linhaObstaculo >= 7) {
         linhaObstaculo = 0;
         pontos++;
         $("#pontos").text(pontos);
+    }
+
+    if (colunaObstaculo2 != -1) {
+        $(obstaculo[1].addClass("obstaculo2"));
+        $("#" + (linhaObstaculo2 - 1) + "-" + colunaObstaculo2).removeClass("obstaculo2");
+        linhaObstaculo2++;
+        if (linhaObstaculo2 >= 7) {
+            linhaObstaculo2 = 0;
+            pontos++;
+            $("#pontos").text(pontos);
+        }
     }
 }
 
@@ -120,7 +139,7 @@ function verificaBatida() {
     for (var i = 0; i < tds.length; i++) {
         if (tds[i].className.indexOf("obstaculo") != -1 && tds[i].className.indexOf("carrinho") != -1) {
             $("#status").text("Game Over");
-            if(record < pontos){
+            if (record < pontos) {
                 record = pontos;
                 $("#record").text(record);
             }
@@ -131,7 +150,7 @@ function verificaBatida() {
 }
 
 function andaCarrinho(key) {
-    if($("#status").text() != "Game Over"){
+    if ($("#status").text() != "Game Over") {
         $("#" + carrinhoL + "-" + carrinhoC).removeClass("carrinho");
         if (key == 37 && carrinhoC > 0) {
             carrinhoC--;

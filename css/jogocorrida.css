@@ -3,16 +3,16 @@
     padding: 0;
 }
 
-.base{
+.base {
     margin: 0 auto;
-    width: 1200px;
 }
-.basePista{
-    
+
+.basePista {
     width: 69%;
     float: left;
 }
-.baseOpcoes{
+
+.baseOpcoes {
     width: 30%;
     float: left;
 }
@@ -22,6 +22,7 @@
     background-image: url("../img/rua.jpg");
     background-size: 518px;
 }
+
 #pista td {
     width: 45px;
     height: 100px;
@@ -32,19 +33,20 @@
     background-size: 100%;
     background-repeat: no-repeat;
 }
+
 .obstaculo2 {
     background-image: url("../img/carro-preto.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
 
-.carrinho{
+.carrinho {
     background-image: url("../img/carro-vermelho.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
 
-.pontuacao{
+.pontuacao {
     width: 200px;
     text-align: center;
     font-size: 25px;
@@ -59,7 +61,8 @@
     margin: 15px 0px;
     padding: 10px 10px;
 }
-.botao{
+
+.botao {
     text-transform: uppercase;
     height: 36px;
     background-color: #673AB7;
@@ -71,9 +74,11 @@
     border-radius: 2px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 3px 4px rgba(0, 0, 0, 0.12), 0 1px 5px rgba(0, 0, 0, 0.20);
 }
-.botao:hover{
+
+.botao:hover {
     background-color: #5E35B1;
 }
+
 .botao:active {
     background-color: #512DA8;
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.14), 0 3px 14px rgba(0, 0, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.20);
