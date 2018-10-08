@@ -2,6 +2,9 @@
     margin: 0;
     padding: 0;
 }
+body{
+    background-color: #FFF;
+}
 
 .base {
     margin: 0 auto;
@@ -65,7 +68,7 @@
 .botao {
     text-transform: uppercase;
     height: 36px;
-    background-color: #673AB7;
+    background-color: #03A9F4;
     color: white;
     border: 0;
     margin: 15px 5px 15px 5px;
@@ -76,10 +79,10 @@
 }
 
 .botao:hover {
-    background-color: #5E35B1;
+    background-color: #039BE5;
 }
 
 .botao:active {
-    background-color: #512DA8;
+    background-color: #0288D1;
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.14), 0 3px 14px rgba(0, 0, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.20);
 }
