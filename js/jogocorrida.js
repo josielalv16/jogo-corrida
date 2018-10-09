@@ -2,14 +2,6 @@
 var velocidade = 1000;
 //Velocidade da pista
 var velocidadePista = 3;
-//Linha inicial dos obstaculos
-var linhaObstaculo = 0;
-var linhaObstaculo2 = 0;
-//Colunas iniciais dos obstaculos
-var colunaObstaculo = 0;
-var colunaObstaculo2 = -1;
-//Variavel para remover o obstaculo da posição anterior da atual
-var linhaRemove = -1;
 //Linha inicial do carrinho do player
 var carrinhoL = 7;
 //Coluna inicial do carrinho do player
@@ -20,12 +12,13 @@ var intervalPista;
 //Pontuação
 var pontos = 0;
 var record = 0;
-//Tipo do obstaculo 1 = obstaculo1; 2 = obstaculo2
-var carObstaculo = 1;
 //Quantidade de px que a pista vai rodar
 var rolaPista = 0;
 //Lista de obstaculos
 var listObs = [];
+//Lista com linhas e colunas dos obstaculos
+var linhasObstaculos = [0, 0, 0, 0];
+var colunasObstaculos = [0, -1, -1, -1];
 
 $(document).ready(function () {
     criarPista();
@@ -56,14 +49,11 @@ function novoJogo() {
     intervalPista = setInterval(rolarPista, 50);
     velocidade = 1000;
     velocidadePista = 3;
-    linhaObstaculo = 0;
-    colunaObstaculo = 0;
-    linhaObstaculo2 = 0;
-    colunaObstaculo2 = -1;
-    linhaRemove = -1;
     carrinhoL = 7;
     carrinhoC = 5;
     pontos = 0;
+    linhasObstaculos = [0, 0, 0, 0];
+    colunasObstaculos = [0, -1, -1, -1];
     $("#pontos").text(pontos);
     $("#status").text("Jogando");
     criarPista();
@@ -75,7 +65,7 @@ function novoJogo() {
 function rolarPista() {
     var tabela = $("table")[0];
     rolaPista += velocidadePista;
-    if (rolaPista > 700) {
+    if (rolaPista > 1000) {
         rolaPista = 0;
     }
     tabela.style.backgroundPosition = "0px " + rolaPista + "px";
@@ -112,22 +102,34 @@ function desenharCarrinho(linha, coluna) {
 }
 
 function desenhaObstaculo() {
-    //Se a linhaObstaculo for 0 cria um novo obstaculo em uma coluna aleatoria da tabela
-    if (linhaObstaculo == 0) {
-        carObstaculo = carObstaculo == 2 ? 1 : 2;
-        colunaObstaculo = Math.floor((Math.random() * 11));
+    //Se a linhasObstaculos[0] for 0 cria um novo obstaculo em uma coluna aleatoria da tabela
+    if (linhasObstaculos[0] == 0) {
+        colunasObstaculos[0] = Math.floor((Math.random() * 11));
     }
-    //Se a linhaObstaculo for 3, cria um novo obstaculo, colocando dois obstaculos da tabela
-    if (linhaObstaculo == 3) {
-        carObstaculo = carObstaculo == 1 ? 2 : 1;
-        colunaObstaculo2 = Math.floor((Math.random() * 11));
+    //Se a linhasObstaculos[0] for 2, cria um novo obstaculo, colocando dois obstaculos na tabela
+    if (linhasObstaculos[0] == 2) {
+        colunasObstaculos[1] = Math.floor((Math.random() * 11));
+    }
+    //Se a linhasObstaculos[0] for 4, cria um novo obstaculo, colocando tres obstaculos na tabela
+    if (linhasObstaculos[0] == 4) {
+        colunasObstaculos[2] = Math.floor((Math.random() * 11));
+    }
+    //Se a linhasObstaculos[0] for 6, cria um novo obstaculo, colocando quatro obstaculos na tabela
+    if (linhasObstaculos[0] == 6) {
+        colunasObstaculos[3] = Math.floor((Math.random() * 11));
     }
 
-    //Adiciona o primeiro obstaculo da lista
-    listObs[0] = $("#" + linhaObstaculo + "-" + colunaObstaculo);
-    //Somente adiciona o segundo obstaculo, se ja tiver criado o mesmo
-    if (colunaObstaculo2 != -1) {
-        listObs[1] = $("#" + linhaObstaculo2 + "-" + colunaObstaculo2);
+    //Adiciona o primeiro obstaculo na lista
+    listObs[0] = $("#" + linhasObstaculos[0] + "-" + colunasObstaculos[0]);
+    //Somente adiciona os outros obstaculos se a variaval de colunasObstaculos for diferente de -1
+    if (colunasObstaculos[1] != -1) {
+        listObs[1] = $("#" + linhasObstaculos[1] + "-" + colunasObstaculos[1]);
+    }
+    if (colunasObstaculos[2] != -1) {
+        listObs[2] = $("#" + linhasObstaculos[2] + "-" + colunasObstaculos[2]);
+    }
+    if (colunasObstaculos[3] != -1) {
+        listObs[3] = $("#" + linhasObstaculos[3] + "-" + colunasObstaculos[3]);
     }
     //Atualiza os obstaculos na tabela
     atualizaObstaculo(listObs);
@@ -137,29 +139,25 @@ function desenhaObstaculo() {
 }
 
 function atualizaObstaculo(obstaculo) {
-    //Adiciona a classe de obstaculo na posição da tabela
-    $(obstaculo[0].addClass("obstaculo1"));
-    //Remove a classe de obstaculo na posição anterior da atual
-    $("#" + (linhaObstaculo - 1) + "-" + colunaObstaculo).removeClass("obstaculo1");
-
-    //Responsavel por passar o obstaculo para a proxima linha da tabela
-    linhaObstaculo++;
-    //Se a linhaObstaculo for maior/igual a 7, obstaculo percorreu todas as linhas, saiu da tabela, então volta pra linha 0 e atualiza os pontos
-    if (linhaObstaculo >= 9) {
-        linhaObstaculo = 0;
-        pontos++;
-        $("#pontos").text(pontos);
-    }
-
-    //Faz o mesmo acima, porem somente depois de ja ter adicionado o segundo obstaculo
-    if (colunaObstaculo2 != -1) {
-        $(obstaculo[1].addClass("obstaculo2"));
-        $("#" + (linhaObstaculo2 - 1) + "-" + colunaObstaculo2).removeClass("obstaculo2");
-        linhaObstaculo2++;
-        if (linhaObstaculo2 >= 9) {
-            linhaObstaculo2 = 0;
-            pontos++;
-            $("#pontos").text(pontos);
+    for (var i = 0; i < colunasObstaculos.length; i++) {
+        if (colunasObstaculos[i] != -1) {
+            //Se 'i' for par adiciona o obstaculo1 se for impar adiciona obstaculo2
+            if (i % 2 == 0) {
+                $(obstaculo[i].addClass("obstaculo1"));
+                //Remove o obstaculo da posição anterior da atual
+                $("#" + (linhasObstaculos[i] - 1) + "-" + colunasObstaculos[i]).removeClass("obstaculo1");
+            } else {
+                $(obstaculo[i].addClass("obstaculo2"));
+                $("#" + (linhasObstaculos[i] - 1) + "-" + colunasObstaculos[i]).removeClass("obstaculo2");
+            }
+            //Passa o obstaculo para a proxima linha da tabela
+            linhasObstaculos[i]++;
+            //Se a linhasObstaculos[i] for maior/igual a 9, obstaculo percorreu todas as linhas, saiu da tabela, então volta para linha 0 e atualiza os pontos
+            if (linhasObstaculos[i] >= 9) {
+                linhasObstaculos[i] = 0;
+                pontos++;
+                $("#pontos").text(pontos);
+            }
         }
     }
 }
@@ -176,7 +174,7 @@ function verificaBatida() {
                 record = pontos;
                 $("#record").text(record);
             }
-
+            //Remove as classes da coluna/linha
             tds[i].classList.remove("obstaculo1");
             tds[i].classList.remove("obstaculo2");
 
@@ -215,16 +213,24 @@ function andaCarrinho(key) {
 }
 
 function explosao() {
+    //Captura a td que esta o carrinho, onde ocorreu a batida
     var td = document.getElementsByClassName("carrinho")[0];
+    //Adiciona classe da explosão (sprite)
     td.classList.add("explosao");
+    //Remove o carrinho
     td.classList.remove("carrinho");
 
+    //Posições X na imagem PNG do sprite de explosão
     var sprite = [0, 76, 152, 228, 304, 380, 456, 532, 608, 684, 760, 836, 912, 988, 1064, 1140, 1216, 1292, 1368, 1444, 1520, 1596, 1672, 1748, 1824, 1900, 1976, 2052, 2128, 2204, 2280, 2356, 2432, 2508, 2584, 2660, 2736];
-    var explosao = document.getElementsByClassName('explosao')[0];
+
+    //Auxiliar para percorrer as posições do sprite
     var aux = 0;
+    //Altera a posição X do sprite a cada 60 milisegundos 
     var i = setInterval(function () {
-        explosao.setAttribute('style', 'background-position: -' + sprite[aux] + 'px 0px;');
+        //Altera a posição do sprite
+        td.setAttribute('style', 'background-position: -' + sprite[aux] + 'px 0px;');
         aux++;
+        //Se aux for maior/igual ao tamanho da lista de posições, zera aux e pausa a explosão
         if (aux >= sprite.length) {
             aux = 0;
             clearInterval(i);
