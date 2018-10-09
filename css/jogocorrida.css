@@ -23,30 +23,33 @@ body{
 #pista {
     margin: 0 auto;
     background-image: url("../img/rua.jpg");
-    background-size: 518px;
+    background-size: 430px;
 }
 
 #pista td {
-    width: 45px;
-    height: 100px;
+    width: 76px;
+    height: 80px;
 }
 
 .obstaculo1 {
     background-image: url("../img/carro-branco.png");
-    background-size: 100%;
+    background-size: 50%;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .obstaculo2 {
     background-image: url("../img/carro-preto.png");
-    background-size: 100%;
+    background-size: 50%;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .carrinho {
     background-image: url("../img/carro-vermelho.png");
-    background-size: 100%;
+    background-size: 50%;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 .pontuacao {
@@ -85,4 +88,11 @@ body{
 .botao:active {
     background-color: #0288D1;
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.14), 0 3px 14px rgba(0, 0, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.20);
+}
+
+.explosao{
+    background-image: url("../img/explosao.png");
+    width: 76px;
+    height: 80px;
+    background-repeat: no-repeat;
 }

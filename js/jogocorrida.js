@@ -11,7 +11,7 @@ var colunaObstaculo2 = -1;
 //Variavel para remover o obstaculo da posição anterior da atual
 var linhaRemove = -1;
 //Linha inicial do carrinho do player
-var carrinhoL = 5;
+var carrinhoL = 7;
 //Coluna inicial do carrinho do player
 var carrinhoC = 5;
 //Interval dos obstaculos e da pista
@@ -61,7 +61,7 @@ function novoJogo() {
     linhaObstaculo2 = 0;
     colunaObstaculo2 = -1;
     linhaRemove = -1;
-    carrinhoL = 5;
+    carrinhoL = 7;
     carrinhoC = 5;
     pontos = 0;
     $("#pontos").text(pontos);
@@ -75,7 +75,7 @@ function novoJogo() {
 function rolarPista() {
     var tabela = $("table")[0];
     rolaPista += velocidadePista;
-    if (rolaPista > 500) {
+    if (rolaPista > 700) {
         rolaPista = 0;
     }
     tabela.style.backgroundPosition = "0px " + rolaPista + "px";
@@ -94,7 +94,7 @@ function criarPista() {
     var base = $("#basePista");
     var html = "<table id='pista'>";
 
-    for (var linha = 0; linha < 6; linha++) {
+    for (var linha = 0; linha < 8; linha++) {
         html += "<tr>";
         for (var coluna = 0; coluna < 11; coluna++) {
             html += "<td id='" + linha + "-" + coluna + "' class=''></td>";
@@ -145,7 +145,7 @@ function atualizaObstaculo(obstaculo) {
     //Responsavel por passar o obstaculo para a proxima linha da tabela
     linhaObstaculo++;
     //Se a linhaObstaculo for maior/igual a 7, obstaculo percorreu todas as linhas, saiu da tabela, então volta pra linha 0 e atualiza os pontos
-    if (linhaObstaculo >= 7) {
+    if (linhaObstaculo >= 9) {
         linhaObstaculo = 0;
         pontos++;
         $("#pontos").text(pontos);
@@ -156,7 +156,7 @@ function atualizaObstaculo(obstaculo) {
         $(obstaculo[1].addClass("obstaculo2"));
         $("#" + (linhaObstaculo2 - 1) + "-" + colunaObstaculo2).removeClass("obstaculo2");
         linhaObstaculo2++;
-        if (linhaObstaculo2 >= 7) {
+        if (linhaObstaculo2 >= 9) {
             linhaObstaculo2 = 0;
             pontos++;
             $("#pontos").text(pontos);
@@ -176,6 +176,11 @@ function verificaBatida() {
                 record = pontos;
                 $("#record").text(record);
             }
+
+            tds[i].classList.remove("obstaculo1");
+            tds[i].classList.remove("obstaculo2");
+
+            explosao();
             //Pausa o movimento dos obstaculos e da pista
             clearInterval(interval);
             clearInterval(intervalPista);
@@ -192,7 +197,7 @@ function andaCarrinho(key) {
             carrinhoC--;
         }
         //Seta para Cima, atualiza a linha do carrinho para Cima
-        else if (key == 38 && carrinhoL > 4) {
+        else if (key == 38 && carrinhoL > 6) {
             carrinhoL--;
         }
         //Seta para Direita, atualiza a coluna do carrinho para Direita
@@ -200,11 +205,29 @@ function andaCarrinho(key) {
             carrinhoC++;
         }
         //Seta para Baixo, alualiza a linha do carrinho para Baixo
-        else if (key == 40 && carrinhoL < 5) {
+        else if (key == 40 && carrinhoL < 7) {
             carrinhoL++;
         }
         //Desenha carrinho na nova posição
         desenharCarrinho(carrinhoL, carrinhoC);
     }
     verificaBatida();
+}
+
+function explosao() {
+    var td = document.getElementsByClassName("carrinho")[0];
+    td.classList.add("explosao");
+    td.classList.remove("carrinho");
+
+    var sprite = [0, 76, 152, 228, 304, 380, 456, 532, 608, 684, 760, 836, 912, 988, 1064, 1140, 1216, 1292, 1368, 1444, 1520, 1596, 1672, 1748, 1824, 1900, 1976, 2052, 2128, 2204, 2280, 2356, 2432, 2508, 2584, 2660, 2736];
+    var explosao = document.getElementsByClassName('explosao')[0];
+    var aux = 0;
+    var i = setInterval(function () {
+        explosao.setAttribute('style', 'background-position: -' + sprite[aux] + 'px 0px;');
+        aux++;
+        if (aux >= sprite.length) {
+            aux = 0;
+            clearInterval(i);
+        }
+    }, 60);
 }
